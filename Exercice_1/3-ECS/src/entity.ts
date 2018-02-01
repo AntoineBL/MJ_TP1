@@ -1,4 +1,5 @@
 import { IComponent, ComponentFactory } from './components';
+import { IComponentDesc } from './scene';
 
 export interface IEntityWalker {
   (entity: IEntity, name: string): Promise<any> | void;
@@ -29,22 +30,24 @@ export class Entity implements IEntity {
   // nouveaux composants. Permet ainsi de substituer
   // cette fonction afin de réaliser des tests unitaires.
   static componentCreator = ComponentFactory.create;
-  list = []
+  mapComponent = new Map<string, IComponent>();
 
   // ## Méthode *addComponent*
   // Cette méthode prend en paramètre le type d'un composant et
   // instancie un nouveau composant.
   addComponent(type: string): IComponent {
     const newComponent = Entity.componentCreator(type, this);
-    //return newComponent
-    throw new Error('Not implemented');
+    this.mapComponent.set(type, newComponent);
+    return newComponent
+    //throw new Error('Not implemented');
   }
 
   // ## Fonction *getComponent*
   // Cette fonction retourne un composant existant du type spécifié
   // associé à l'objet.
   getComponent<T extends IComponent>(type: string): T {
-    throw new Error('Not implemented');
+    return <T>this.mapComponent.get(type);
+    //throw new Error('Not implemented');
     
   }
 
@@ -67,10 +70,7 @@ export class Entity implements IEntity {
   // entité et appelle la fonction `fn` pour chacun, afin
   // d'implémenter le patron de conception [visiteur](https://fr.wikipedia.org/wiki/Visiteur_(patron_de_conception)).
   walkChildren(fn: IEntityWalker): void {
-    this.list.forEach(element => {
-      
-    });
-    //throw new Error('Not implemented');
+    throw new Error('Not implemented');
   }
 
   // ## Méthode *walkComponent*
