@@ -31,7 +31,7 @@ export class Entity implements IEntity {
   // cette fonction afin de réaliser des tests unitaires.
   static componentCreator = ComponentFactory.create;
   mapComponent = new Map<string, IComponent>();
-
+  mapChild = new Map<string, IEntity>();
   // ## Méthode *addComponent*
   // Cette méthode prend en paramètre le type d'un composant et
   // instancie un nouveau composant.
@@ -55,14 +55,15 @@ export class Entity implements IEntity {
   // La méthode *addChild* ajoute à l'objet courant un objet
   // enfant.
   addChild(objectName: string, child: IEntity) {
-    throw new Error('Not implemented');
+    this.mapChild.set(objectName, child);
+    //throw new Error('Not implemented');
   }
 
   // ## Fonction *getChild*
   // La fonction *getChild* retourne un objet existant portant le
   // nom spécifié, dont l'objet courant est le parent.
   getChild(objectName: string): IEntity | undefined {
-    throw new Error('Not implemented');
+    return this.mapChild.get(objectName);
   }
 
   // ## Méthode *walkChildren*
