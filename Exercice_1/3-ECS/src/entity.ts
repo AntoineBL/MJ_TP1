@@ -71,7 +71,10 @@ export class Entity implements IEntity {
   // entité et appelle la fonction `fn` pour chacun, afin
   // d'implémenter le patron de conception [visiteur](https://fr.wikipedia.org/wiki/Visiteur_(patron_de_conception)).
   walkChildren(fn: IEntityWalker): void {
-    throw new Error('Not implemented');
+    this.mapChild.forEach(function (item, key){
+      fn(item, key)
+    })
+    //throw new Error('Not implemented');
   }
 
   // ## Méthode *walkComponent*
@@ -79,6 +82,9 @@ export class Entity implements IEntity {
   // entité et appelle la fonction `fn` pour chacun, afin
   // d'implémenter le patron de conception [visiteur](https://fr.wikipedia.org/wiki/Visiteur_(patron_de_conception)).
   walkComponent(fn: IComponentWalker): void {
-    throw new Error('Not implemented');
+    this.mapComponent.forEach(function (item, key){
+      fn(item, key)
+    })
+    //throw new Error('Not implemented');
   }
 }
