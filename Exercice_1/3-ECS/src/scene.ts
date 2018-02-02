@@ -32,6 +32,10 @@ export interface ISceneDesc {
 export class Scene {
   static current: Scene;
 
+  // ## Attribut *description*
+  // Contien l'ensemble de la hiérarchie et ses paramètres
+  description: ISceneDesc;
+
   // ## Fonction statique *create*
   // La fonction *create* permet de créer une nouvelle instance
   // de la classe *Scene*, contenant tous les objets instanciés
@@ -42,11 +46,16 @@ export class Scene {
   static create(description: ISceneDesc): Promise<Scene> {
     const scene = new Scene(description);
     Scene.current = scene;
-    throw new Error('Not implemented');
+    return new Promise(function (resolve, reject){
+      if(Scene.current.description == description) resolve(Scene.current);
+      else reject("Not correctly implemented");
+    });
+    //throw new Error('Not implemented');
   }
 
   private constructor(description: ISceneDesc) {
-    throw new Error('Not implemented');
+    this.description = description;
+    //throw new Error('Not implemented');
   }
 
   // ## Fonction *findObject*
