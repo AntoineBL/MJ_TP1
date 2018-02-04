@@ -36,6 +36,8 @@ export class Scene {
   // Contient la description de la hiérarchie et ses paramètres
   description: ISceneDesc;
 
+  mapEntity = new Map<string, IEntity>();
+
   // ## Fonction statique *create*
   // La fonction *create* permet de créer une nouvelle instance
   // de la classe *Scene*, contenant tous les objets instanciés
@@ -46,6 +48,13 @@ export class Scene {
   static create(description: ISceneDesc): Promise<Scene> {
     const scene = new Scene(description);
     Scene.current = scene;
+
+    // ****
+    // CODE CANCER QUI PARCOURT LA CONFIG ET CREE LES ENTITE (avec leur composants , enfants ...)
+    // Puis ajoute dans la map
+    // ****
+
+
     return new Promise(function (resolve, reject){
       if(Scene.current.description == description) resolve(Scene.current);
       else reject("Can't create this scene");
@@ -75,6 +84,14 @@ export class Scene {
 
     throw new Error('This object is not in the scene');
     */
+    console.log("--FONCTION FINDOBJECT--");
+    var scene: ISceneDesc = this.description;
+    console.log(scene);
+    console.log("TEST 1 : " + scene["premier"]);
+
+    //Object.keys(scene).forEach((key) => {console.log(scene[key])});
+    Object.keys(scene).forEach((key) => {console.log(key)});
+
     throw new Error('Not implemented');
   }
 
