@@ -49,12 +49,6 @@ export class Scene {
     const scene = new Scene(description);
     Scene.current = scene;
 
-    // ****
-    // CODE CANCER QUI PARCOURT LA CONFIG ET CREE LES ENTITE (avec leur composants , enfants ...)
-    // Puis ajoute dans la map
-    // ****
-
-
     return new Promise(function (resolve, reject){
       if(Scene.current.description == description) resolve(Scene.current);
       else reject("Can't create this scene");
@@ -64,6 +58,11 @@ export class Scene {
 
   private constructor(description: ISceneDesc) {
     this.description = description;
+
+    Object.keys(description).forEach((key) => {
+      this.mapEntity.set(key, new Entity());
+    })
+
     //throw new Error('Not implemented');
   }
 
@@ -71,26 +70,21 @@ export class Scene {
   // La fonction *findObject* retourne l'objet de la scène
   // portant le nom spécifié.
   findObject(objectName: string): IEntity {
-    /*
-    var object: ISceneDesc = this.description;
+
+
+    // console.log("--FONCTION FINDOBJECT--");
+    // var scene: ISceneDesc = this.description;
+    // console.log(scene); 
+
+    // //Object.keys(scene).forEach((key) => {console.log(scene[key])});
+    // Object.keys(scene).forEach((key) => {console.log(key)});
+    if(typeof this.mapEntity.get(objectName) ===  undefined) {
+          throw new Error("L'entité n'existe pas dans la scene");
+    } else {
+      return <IEntity>this.mapEntity.get(objectName)
+    }
     
-    while(object != null && !object.key.components.has(objectName)){
-      object = object.key.children;
-    }
 
-    if(object.key.components.has(objectName)){
-      return object.key.components.get(objectName);
-    }
-
-    throw new Error('This object is not in the scene');
-    */
-    console.log("--FONCTION FINDOBJECT--");
-    var scene: ISceneDesc = this.description;
-    console.log(scene);
-    console.log("TEST 1 : " + scene["premier"]);
-
-    //Object.keys(scene).forEach((key) => {console.log(scene[key])});
-    Object.keys(scene).forEach((key) => {console.log(key)});
 
     throw new Error('Not implemented');
   }
