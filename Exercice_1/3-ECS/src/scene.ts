@@ -33,7 +33,7 @@ export class Scene {
   static current: Scene;
 
   // ## Attribut *description*
-  // Contien l'ensemble de la hiérarchie et ses paramètres
+  // Contient la description de la hiérarchie et ses paramètres
   description: ISceneDesc;
 
   // ## Fonction statique *create*
@@ -48,7 +48,7 @@ export class Scene {
     Scene.current = scene;
     return new Promise(function (resolve, reject){
       if(Scene.current.description == description) resolve(Scene.current);
-      else reject("Not correctly implemented");
+      else reject("Can't create this scene");
     });
     //throw new Error('Not implemented');
   }
@@ -62,6 +62,19 @@ export class Scene {
   // La fonction *findObject* retourne l'objet de la scène
   // portant le nom spécifié.
   findObject(objectName: string): IEntity {
+    /*
+    var object: ISceneDesc = this.description;
+    
+    while(object != null && !object.key.components.has(objectName)){
+      object = object.key.children;
+    }
+
+    if(object.key.components.has(objectName)){
+      return object.key.components.get(objectName);
+    }
+
+    throw new Error('This object is not in the scene');
+    */
     throw new Error('Not implemented');
   }
 
@@ -70,6 +83,19 @@ export class Scene {
   // scène et appelle la fonction `fn` pour chacun, afin
   // d'implémenter le patron de conception [visiteur](https://fr.wikipedia.org/wiki/Visiteur_(patron_de_conception)).
   walk(fn: ISceneWalker): Promise<any> {
+    /*
+    return new Promise(function(resolve, reject){
+      let desc = Scene.current.description;
+      while(desc != null){
+        desc.key.components.forEach(function(entity: IEntity,name: string){
+          fn(entity, name);
+        });
+        desc = desc.key.children;
+      }
+      if(desc == null) resolve();
+      else reject();
+    })
+    */
     throw new Error('Not implemented');
   }
 }
