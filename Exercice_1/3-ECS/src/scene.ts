@@ -3,7 +3,7 @@ import { IComponent } from './components';
 
 // # Interface *ISceneWalker*
 // Définit le prototype de fonction permettant d'implémenter
-// le patron de conception [visiteur](https://fr.wikipedia.org/wiki/Visiteur_(patron_de_conception))
+// le patron de conception [](https://fr.wikipedia.org/wiki/_(patron_de_conception))
 // sur les différentes entités de la scène.
 export interface ISceneWalker {
   (entity: IEntity, name: string): Promise<any>;
@@ -38,6 +38,7 @@ export class Scene {
 
   mapEntity = new Map<string, IEntity>();
 
+  
   // ## Fonction statique *create*
   // La fonction *create* permet de créer une nouvelle instance
   // de la classe *Scene*, contenant tous les objets instanciés
@@ -58,12 +59,57 @@ export class Scene {
 
   private constructor(description: ISceneDesc) {
     this.description = description;
+ 
+    for(var element in description) {
 
-    Object.keys(description).forEach((key) => {
-      this.mapEntity.set(key, new Entity());
-    })
+      this.traiteEntity(element, description[element]);
 
-    //throw new Error('Not implemented');
+    }
+  }
+
+  traiteEntity(entityName : string, entityDesc : IEntityDesc) {
+    var entity = new Entity();
+    this.mapEntity.set(entityName, entity)
+    console.log("Creation de l'entité " + entityName)
+
+    if(Object.keys(entityDesc.components).length === 0) {
+      console.log(entityName + " ... ne possede pas de composants !")
+    } else {
+      for(var subComponent in entityDesc.components) {
+        entity.addComponent(subComponent)
+        console.log(entityName + " possede le composant : " + subComponent)
+      }
+    }
+    if(Object.keys(entityDesc.children).length === 0) {
+      console.log(entityName + " ... ne possede pas de chidren !")
+    } else {   
+      for(var subEntity in entityDesc.children) {
+        this.traiteEntityChild(subEntity, entityDesc.children[subEntity], entity, entityName)
+      }
+    }
+  }
+
+  traiteEntityChild(entityName : string, entityDesc : IEntityDesc, entityParent : IEntity, entityParentName : string) {
+    var entity = new Entity();
+    entityParent.addChild(entityName, entity)
+    this.mapEntity.set(entityName, entity)
+    console.log("Creation de l'entité " + entityName + " qui a pour parent : " + entityParentName)
+
+    if(Object.keys(entityDesc.components).length === 0) {
+      console.log(entityName + " ... ne possede pas de composants !")
+    } else {
+      for(var subComponent in entityDesc.components) {
+        entity.addComponent(subComponent)
+        console.log(entityName + " possede le composant : " + subComponent)
+      }
+    }
+    if(Object.keys(entityDesc.children).length === 0) {
+      console.log(entityName + " ...  ne possede pas de chidren !")
+    } else {   
+      for(var subEntity in entityDesc.children) {
+        this.traiteEntityChild(subEntity, entityDesc.children[subEntity], entity, entityName)
+      }
+    }
   }
 
   // ## Fonction *findObject*
@@ -71,42 +117,28 @@ export class Scene {
   // portant le nom spécifié.
   findObject(objectName: string): IEntity {
 
-
-    // console.log("--FONCTION FINDOBJECT--");
-    // var scene: ISceneDesc = this.description;
-    // console.log(scene); 
-
-    // //Object.keys(scene).forEach((key) => {console.log(scene[key])});
-    // Object.keys(scene).forEach((key) => {console.log(key)});
     if(typeof this.mapEntity.get(objectName) ===  undefined) {
           throw new Error("L'entité n'existe pas dans la scene");
     } else {
+      console.log("OKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK")
+      console.log(this.mapEntity.get("complex "))
       return <IEntity>this.mapEntity.get(objectName)
     }
-    
-
-
-    throw new Error('Not implemented');
   }
 
   // ## Méthode *walk*
   // Cette méthode parcourt l'ensemble des entités de la
   // scène et appelle la fonction `fn` pour chacun, afin
-  // d'implémenter le patron de conception [visiteur](https://fr.wikipedia.org/wiki/Visiteur_(patron_de_conception)).
+  // d'implémenter le patron de conception [](https://fr.wikipedia.org/wiki/_(patron_de_conception)).
   walk(fn: ISceneWalker): Promise<any> {
-    /*
-    return new Promise(function(resolve, reject){
-      let desc = Scene.current.description;
-      while(desc != null){
-        desc.key.components.forEach(function(entity: IEntity,name: string){
-          fn(entity, name);
-        });
-        desc = desc.key.children;
-      }
-      if(desc == null) resolve();
-      else reject();
+
+    this.mapEntity.forEach(function (item, key){
+      fn(item, key)
     })
-    */
-    throw new Error('Not implemented');
+
+    return new Promise(function (resolve, reject){
+      resolve();
+    });
+    
   }
 }

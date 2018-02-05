@@ -30,6 +30,7 @@ export class Entity implements IEntity {
   // nouveaux composants. Permet ainsi de substituer
   // cette fonction afin de réaliser des tests unitaires.
   static componentCreator = ComponentFactory.create;
+  
   mapComponent = new Map<string, IComponent>();
   mapChild = new Map<string, IEntity>();
   // ## Méthode *addComponent*
@@ -39,16 +40,13 @@ export class Entity implements IEntity {
     const newComponent = Entity.componentCreator(type, this);
     this.mapComponent.set(type, newComponent);
     return newComponent
-    //throw new Error('Not implemented');
   }
 
   // ## Fonction *getComponent*
   // Cette fonction retourne un composant existant du type spécifié
   // associé à l'objet.
   getComponent<T extends IComponent>(type: string): T {
-    return <T>this.mapComponent.get(type);
-    //throw new Error('Not implemented');
-    
+    return <T>this.mapComponent.get(type);  
   }
 
   // ## Méthode *addChild*
@@ -56,7 +54,6 @@ export class Entity implements IEntity {
   // enfant.
   addChild(objectName: string, child: IEntity) {
     this.mapChild.set(objectName, child);
-    //throw new Error('Not implemented');
   }
 
   // ## Fonction *getChild*
@@ -74,7 +71,6 @@ export class Entity implements IEntity {
     this.mapChild.forEach(function (item, key){
       fn(item, key)
     })
-    //throw new Error('Not implemented');
   }
 
   // ## Méthode *walkComponent*
@@ -85,6 +81,5 @@ export class Entity implements IEntity {
     this.mapComponent.forEach(function (item, key){
       fn(item, key)
     })
-    //throw new Error('Not implemented');
   }
 }
